@@ -18,8 +18,16 @@ public class Datum {
      */
     public Datum(int tag, int monat, int jahr) {
         this.jahr = jahr;
-        this.tag = tag;
-        this.monat = monat;
+
+        int tageImMonat = getAnzahlTageInDiesemMonat(monat, istSchaltjahr(jahr));
+        if (tageImMonat == -1 || tag < 1 || tag > tageImMonat) {
+            // ungültiges Datum
+            this.tag = 1;
+            this.monat = 1;
+        } else {
+            this.tag = tag;
+            this.monat = monat;
+        }
 
     }
 
@@ -37,7 +45,25 @@ public class Datum {
      * @return Anzahl der Tage in monat; -1, wenn der nicht existiert
      */
     public static int getAnzahlTageInDiesemMonat(int monat, boolean schaltjahr) {
-        return -1;
+        switch (monat) {
+        case 1:
+        case 3:
+        case 5:
+        case 7:
+        case 8:
+        case 10:
+        case 12:
+            return 31;
+        case 4:
+        case 6:
+        case 9:
+        case 11:
+            return 30;
+        case 2:
+            return schaltjahr ? 29 : 28;
+        default:
+            return -1;
+        }
 
     }
 
@@ -48,7 +74,10 @@ public class Datum {
      * @return true, wenn jahr ein Schaltjahr ist, false, wenn nicht
      */
     public static boolean istSchaltjahr(int jahr) {
-        return false;
+        boolean teilbarDurch4 = isTeilbarDurch(jahr, 4);
+        boolean teilbarDurch100 = isTeilbarDurch(jahr, 100);
+        boolean teilbarDurch400 = isTeilbarDurch(jahr, 400);
+        return (teilbarDurch4 && !teilbarDurch100) || teilbarDurch400;
     }
 
     /**
