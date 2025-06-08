@@ -111,6 +111,11 @@ public class Datum {
         Datum neu;
         neu = new Datum(tag, monat, jahr);
         System.out.println(neu);
+        if (istSchaltjahr(jahr)) {
+            System.out.println(jahr + " ist ein Schaltjahr.");
+        } else {
+            System.out.println(jahr + " ist kein Schaltjahr.");
+        }
     }
 
 }
